@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Improbable.Gdk.Core;
 using Improbable.Gdk.Subscriptions;
-using Improbable.Transform;
+using Improbable.Gdk.TransformSynchronization;
 using Improbable.Worker.CInterop;
 using Unity.Collections;
 using Unity.Entities;

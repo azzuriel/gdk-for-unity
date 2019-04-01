@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Improbable.Gdk.Tools.MiniJSON;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -42,19 +40,6 @@ namespace Improbable.Gdk.Tools
         private const string UsrLocalShareDir = "/usr/local/share";
 
         private static readonly string[] MacPaths = { UsrLocalBinDir, UsrLocalShareDir };
-
-        static Common()
-        {
-            try
-            {
-                var versionFile = Path.Combine(GetThisPackagePath(), "core-sdk.version");
-                CoreSdkVersion = File.ReadAllText(versionFile, Encoding.UTF8).Trim();
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
 
         internal static string GetThisPackagePath()
         {
