@@ -14,12 +14,6 @@ namespace Improbable.Gdk.Tools
     public static class Common
     {
         /// <summary>
-        ///     The version of the CoreSdk the GDK is pinned to.
-        ///     Modify the core-sdk.version file in this source file's directory to change the version.
-        /// </summary>
-        public static string CoreSdkVersion { get; }
-
-        /// <summary>
         ///     The absolute path to the root folder of the SpatialOS project.
         /// </summary>
         public static readonly string
@@ -34,8 +28,6 @@ namespace Improbable.Gdk.Tools
 
         public const string ProductName = "SpatialOS for Unity";
 
-        public const string PackagesDir = "Packages";
-
         private const string UsrLocalBinDir = "/usr/local/bin";
         private const string UsrLocalShareDir = "/usr/local/share";
 
@@ -47,7 +39,7 @@ namespace Improbable.Gdk.Tools
         }
 
         /// <summary>
-        ///     Finds the "file:" reference path from the package manifest.
+        ///     Finds the path for a given package referenced (indirectly) in the manifest.json.
         /// </summary>
         public static string GetPackagePath(string packageName)
         {
@@ -58,14 +50,25 @@ namespace Improbable.Gdk.Tools
                 // Wait for the request to complete
             }
 
+            // Package directly referenced
             var package = request.Result.FirstOrDefault(info => info.name.Equals(packageName));
-
-            if (package == null)
+            if (package != null)
             {
-                throw new Exception($"Could not find '{packageName}', is it in your project's manifest?\n{request.Error.message}");
+                return package.resolvedPath;
             }
 
-            return package.resolvedPath;
+            // Package indirectly referenced (dependency)
+            var cachedPackage = Directory
+                .GetDirectories("Library/PackageCache")
+                .FirstOrDefault(path => Path.GetFileName(path).StartsWith($"{packageName}@"));
+            if (cachedPackage != null)
+            {
+                return Path.GetFullPath(cachedPackage);
+            }
+
+            // Package is not
+            throw new Exception(
+                $"Could not find '{packageName}', is it in your project's manifest?\n{request.Error?.message}");
         }
 
         /// <summary>

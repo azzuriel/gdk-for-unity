@@ -12,17 +12,9 @@ namespace Improbable.Gdk.Tools
     internal static class GenerateCode
     {
         private const string CsProjectFile = ".CodeGenerator/GdkCodeGenerator/GdkCodeGenerator.csproj";
-        private const string FromGdkPackagesDir = "from_gdk_packages";
         private const string ImprobableJsonDir = "build/ImprobableJson";
 
-        private static string SchemaWarningMessage =
-            "// ------------------------------------------------------------------------" + Environment.NewLine +
-            "// WARNING: DO NOT EDIT." + Environment.NewLine +
-            "// Any changes made to this file will be overwritten by the Code Generator." + Environment.NewLine +
-            "// ------------------------------------------------------------------------" + Environment.NewLine +
-            Environment.NewLine;
-
-        private static readonly string SchemaCompilerPath = Path.Combine(
+        private static string SchemaCompilerPath => Path.Combine(
             Common.GetPackagePath("com.improbable.worker.sdk"),
             ".schema_compiler/schema_compiler");
 
@@ -233,7 +225,11 @@ namespace Improbable.Gdk.Tools
                 // Wait for the request to complete
             }
 
-            return request.Result.Select(package => Path.Combine(package.resolvedPath, "Schema")).Where(Directory.Exists);
+            var packagePathsWithSchema = request.Result.Select(package => Path.Combine(package.resolvedPath, "Schema")).Where(Directory.Exists);
+
+            var cachedPackagePathsWithSchema = Directory.GetDirectories("Library/PackageCache").Select(path => Path.GetFullPath(Path.Combine(path, "Schema"))).Where(Directory.Exists);
+
+            return packagePathsWithSchema.Union(cachedPackagePathsWithSchema).Distinct();
         }
     }
 }

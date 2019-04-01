@@ -1,7 +1,6 @@
 using System;
 using Improbable.Gdk.Core;
 using Improbable.Gdk.Core.Commands;
-using Improbable.Gdk.PlayerLifecycle;
 using Improbable.Worker.CInterop;
 using Unity.Entities;
 
