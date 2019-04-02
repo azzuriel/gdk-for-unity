@@ -14,6 +14,7 @@ namespace Improbable.Gdk.Tools
         private const string CsProjectFile = ".CodeGenerator/GdkCodeGenerator/GdkCodeGenerator.csproj";
         private const string ImprobableJsonDir = "build/ImprobableJson";
         private const string ImprobableDescriptorDir = "../../build/assembly/schema";
+        private const string SchemaPackageDir = ".schema";
 
         private static string SchemaCompilerPath => Path.Combine(
             Common.GetPackagePath("com.improbable.worker.sdk"),
@@ -229,9 +230,9 @@ namespace Improbable.Gdk.Tools
                 // Wait for the request to complete
             }
 
-            var packagePathsWithSchema = request.Result.Select(package => Path.Combine(package.resolvedPath, "Schema")).Where(Directory.Exists);
+            var packagePathsWithSchema = request.Result.Select(package => Path.Combine(package.resolvedPath, SchemaPackageDir)).Where(Directory.Exists);
 
-            var cachedPackagePathsWithSchema = Directory.GetDirectories("Library/PackageCache").Select(path => Path.GetFullPath(Path.Combine(path, "Schema"))).Where(Directory.Exists);
+            var cachedPackagePathsWithSchema = Directory.GetDirectories("Library/PackageCache").Select(path => Path.GetFullPath(Path.Combine(path, SchemaPackageDir))).Where(Directory.Exists);
 
             return packagePathsWithSchema.Union(cachedPackagePathsWithSchema).Distinct();
         }
