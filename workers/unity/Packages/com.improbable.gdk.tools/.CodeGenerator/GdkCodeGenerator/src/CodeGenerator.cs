@@ -75,10 +75,13 @@ namespace Improbable.Gdk.CodeGenerator
 
             var bundlePath = Path.Join(options.JsonDirectory, "bundle.json");
 
+            var descriptorPath = Path.Join(options.DescriptorDirectory, "schema.descriptor");
+
             var arguments = new[]
             {
                 "--load_all_schema_on_schema_path",
-                $@"--bundle_json_out={bundlePath}"
+                $@"--bundle_json_out={bundlePath}",
+                $@"--descriptor_set_out={descriptorPath}"
             }.Union(inputPaths).ToList();
 
             SystemTools.RunRedirected(options.SchemaCompilerPath, arguments);
