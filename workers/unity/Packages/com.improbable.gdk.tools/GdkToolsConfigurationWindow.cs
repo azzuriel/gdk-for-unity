@@ -9,8 +9,8 @@ namespace Improbable.Gdk.Tools
     /// </summary>
     public class GdkToolsConfigurationWindow : EditorWindow
     {
-        internal const string CodegenOutputDirLabel = "Code generator output";
-        internal const string DescriptorOutputDirLabel = "Schema descriptor output";
+        internal const string CodegenOutputDirLabel = "C# output directory";
+        internal const string DescriptorOutputDirLabel = "Descriptor directory";
         internal const string SchemaSourceDirsLabel = "Schema sources";
         internal const string RuntimeIpLabel = "Local runtime IP";
         internal const string DevAuthTokenSectionLabel = "Dev Auth Token Settings";
@@ -78,7 +78,8 @@ namespace Improbable.Gdk.Tools
 
                     if (GUILayout.Button(ResetConfigurationButtonText, EditorStyles.toolbarButton))
                     {
-                        if (EditorUtility.DisplayDialog("Confirmation", "Are you sure you want to reset to defaults?", "Yes", "No"))
+                        if (EditorUtility.DisplayDialog("Confirmation", "Are you sure you want to reset to defaults?",
+                            "Yes", "No"))
                         {
                             toolsConfig.ResetToDefault();
                         }
@@ -124,7 +125,7 @@ namespace Improbable.Gdk.Tools
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         toolsConfig.SchemaSourceDirs[i] =
-                            EditorGUILayout.TextField($"Schema dir [{i}]", toolsConfig.SchemaSourceDirs[i]);
+                            EditorGUILayout.TextField($"Schema path [{i}]", toolsConfig.SchemaSourceDirs[i]);
 
                         if (GUILayout.Button(RemoveSchemaDirButton, EditorStyles.miniButton,
                             GUILayout.ExpandWidth(false)))
@@ -149,16 +150,18 @@ namespace Improbable.Gdk.Tools
         private void DrawDevAuthTokenOptions()
         {
             GUILayout.Label(DevAuthTokenSectionLabel, EditorStyles.boldLabel);
+            GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
             using (new EditorGUIUtility.IconSizeScope(new Vector2(12, 12)))
             using (new EditorGUI.IndentLevelScope())
             {
-                toolsConfig.DevAuthTokenDir = EditorGUILayout.TextField(DevAuthTokenDirLabel, toolsConfig.DevAuthTokenDir);
-
-                GUILayout.Label($"Token filepath: {toolsConfig.DevAuthTokenFilepath}", EditorStyles.helpBox);
+                toolsConfig.DevAuthTokenDir =
+                    EditorGUILayout.TextField(DevAuthTokenDirLabel, toolsConfig.DevAuthTokenDir);
 
                 toolsConfig.DevAuthTokenLifetimeDays =
                     EditorGUILayout.IntSlider(DevAuthTokenLifetimeLabel, toolsConfig.DevAuthTokenLifetimeDays, 1, 90);
+
+                GUILayout.Label($"Token filepath: {toolsConfig.DevAuthTokenFilepath}", EditorStyles.helpBox);
             }
         }
 
