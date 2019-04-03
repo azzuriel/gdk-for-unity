@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,13 +10,15 @@ namespace Improbable.Gdk.Tools
     public class GdkToolsConfigurationWindow : EditorWindow
     {
         internal const string CodegenOutputDirLabel = "Code generator output";
+        internal const string DescriptorOutputDirLabel = "Schema descriptor output";
         internal const string SchemaSourceDirsLabel = "Schema sources";
         internal const string RuntimeIpLabel = "Local runtime IP";
         internal const string DevAuthTokenSectionLabel = "Dev Auth Token Settings";
-        internal const string DevAuthTokenDirLabel = "Directory to store token in";
+        internal const string DevAuthTokenDirLabel = "Token directory";
         internal const string DevAuthTokenLifetimeLabel = "Token lifetime (days)";
 
         private const string CodeGeneratorLabel = "Code generator";
+        private const string LocalDeploymentLabel = "Local Deployment";
 
         private static GUIContent AddSchemaDirButton;
         private static GUIContent RemoveSchemaDirButton;
@@ -85,6 +86,8 @@ namespace Improbable.Gdk.Tools
                 }
 
                 DrawCodeGenerationOptions();
+                DrawLocalDeploymentOptions();
+                DrawDevAuthTokenOptions();
 
                 if (check.changed)
                 {
@@ -111,6 +114,9 @@ namespace Improbable.Gdk.Tools
                 toolsConfig.CodegenOutputDir =
                     EditorGUILayout.TextField(CodegenOutputDirLabel, toolsConfig.CodegenOutputDir);
 
+                toolsConfig.DescriptorOutputDir =
+                    EditorGUILayout.TextField(DescriptorOutputDirLabel, toolsConfig.DescriptorOutputDir);
+
                 GUILayout.Label(SchemaSourceDirsLabel, EditorStyles.boldLabel);
 
                 for (var i = 0; i < toolsConfig.SchemaSourceDirs.Count; i++)
@@ -120,7 +126,8 @@ namespace Improbable.Gdk.Tools
                         toolsConfig.SchemaSourceDirs[i] =
                             EditorGUILayout.TextField($"Schema dir [{i}]", toolsConfig.SchemaSourceDirs[i]);
 
-                        if (GUILayout.Button(RemoveSchemaDirButton, EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
+                        if (GUILayout.Button(RemoveSchemaDirButton, EditorStyles.miniButton,
+                            GUILayout.ExpandWidth(false)))
                         {
                             toolsConfig.SchemaSourceDirs.RemoveAt(i);
                         }
@@ -136,20 +143,34 @@ namespace Improbable.Gdk.Tools
                         toolsConfig.SchemaSourceDirs.Add(string.Empty);
                     }
                 }
+            }
+        }
 
-                GUILayout.Label(RuntimeIpLabel, EditorStyles.boldLabel);
-                toolsConfig.RuntimeIp = GUILayout.TextField(toolsConfig.RuntimeIp);
+        private void DrawDevAuthTokenOptions()
+        {
+            GUILayout.Label(DevAuthTokenSectionLabel, EditorStyles.boldLabel);
 
-                GUILayout.Label(DevAuthTokenSectionLabel, EditorStyles.boldLabel);
-
-                GUILayout.Label(DevAuthTokenDirLabel, EditorStyles.label);
-                toolsConfig.DevAuthTokenDir = GUILayout.TextField(toolsConfig.DevAuthTokenDir);
+            using (new EditorGUIUtility.IconSizeScope(new Vector2(12, 12)))
+            using (new EditorGUI.IndentLevelScope())
+            {
+                toolsConfig.DevAuthTokenDir = EditorGUILayout.TextField(DevAuthTokenDirLabel, toolsConfig.DevAuthTokenDir);
 
                 GUILayout.Label($"Token filepath: {toolsConfig.DevAuthTokenFilepath}", EditorStyles.helpBox);
 
-                GUILayout.Label(DevAuthTokenLifetimeLabel, EditorStyles.label);
                 toolsConfig.DevAuthTokenLifetimeDays =
-                    EditorGUILayout.IntSlider(toolsConfig.DevAuthTokenLifetimeDays, 1, 90);
+                    EditorGUILayout.IntSlider(DevAuthTokenLifetimeLabel, toolsConfig.DevAuthTokenLifetimeDays, 1, 90);
+            }
+        }
+
+        private void DrawLocalDeploymentOptions()
+        {
+            GUILayout.Label(LocalDeploymentLabel, EditorStyles.boldLabel);
+            GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+
+            using (new EditorGUIUtility.IconSizeScope(new Vector2(12, 12)))
+            using (new EditorGUI.IndentLevelScope())
+            {
+                toolsConfig.RuntimeIp = EditorGUILayout.TextField(RuntimeIpLabel, toolsConfig.RuntimeIp);
             }
         }
     }
