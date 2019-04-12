@@ -27,6 +27,7 @@
 - The player lifecycle module now dynamically queries for PlayerCreator entities, and sends requests to a random one each time. This removes the reliance on a hardcoded PlayerCreator Entity ID.
 - Removed the `Type` suffix from player lifecycle schema types.
 - `RedirectedProcess.RunAsync()` now takes a `CancellationToken?` as a parameter. This token can be used to cancel the underlying process.
+- Exceptions in callbacks now no longer break the system that called it, but get logged instead.
 
 ### Fixed
 
