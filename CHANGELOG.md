@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed
+
+- Added a `Improbable.Gdk.Core.Editor` asmdef.
+    - Moved `SingletonScriptableObject<T>` from the build system feature module into this assembly and made it public.
+    - Pulled out the `UiStateManager` from the `BuildConfigEditor` into this assembly and made it public.
+
 ## `0.2.1` - 2019-04-15
 
 ### Breaking Changes
