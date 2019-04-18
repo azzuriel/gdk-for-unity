@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added a user-friendly error message when the build system fails to find a SpatialOS Build Configuration instance (#914).
+
 ## `0.2.1` - 2019-04-15
 
 ### Breaking Changes
