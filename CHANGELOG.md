@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added a user-friendly error message when the build system fails to find a SpatialOS Build Configuration instance (#914).
+- Added a user-friendly error message when the build system fails to find a SpatialOS Build Configuration instance. (https://github.com/spatialos/gdk-for-unity/pull/914)
 
 ## `0.2.1` - 2019-04-15
 
